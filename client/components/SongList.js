@@ -1,13 +1,19 @@
 import gql from 'graphql-tag';
 import React, { PureComponent } from 'react';
+import { graphql } from 'react-apollo';
 
 class SongList extends PureComponent {
   render() {
-    return (
-      <div>
-        This will be my song list
-      </div>
-    );
+    const { data } = this.props;
+    const { loading, songs } = data;
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    return loading ?
+      <div>Loading...</div>
+      : <div>I'll soon render {songs.length} songs</div>;
   }
 }
 
@@ -19,4 +25,4 @@ const query = gql`
 }
 `;
 
-export default SongList;
+export default graphql(query)(SongList);
