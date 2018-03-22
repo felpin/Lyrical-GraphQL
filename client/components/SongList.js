@@ -1,3 +1,4 @@
+import gql from 'graphql-tag';
 import React, { PureComponent } from 'react';
 
 class SongList extends PureComponent {
@@ -9,5 +10,13 @@ class SongList extends PureComponent {
     );
   }
 }
+
+const query = gql`
+{
+  songs {
+    title
+  }
+}
+`;
 
 export default SongList;
