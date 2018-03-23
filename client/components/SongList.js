@@ -5,7 +5,7 @@ import { graphql } from 'react-apollo';
 class SongList extends PureComponent {
   renderSongs() {
     return this.props.data.songs.map(song => (
-      <li>
+      <li key={song.id}>
         {song.title}
       </li>
     ));
@@ -27,6 +27,7 @@ class SongList extends PureComponent {
 const query = gql`
 {
   songs {
+    id
     title
   }
 }
