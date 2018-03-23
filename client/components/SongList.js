@@ -5,7 +5,7 @@ import { graphql } from 'react-apollo';
 class SongList extends PureComponent {
   renderSongs() {
     return this.props.data.songs.map(song => (
-      <li key={song.id}>
+      <li key={song.id} className="collection-item">
         {song.title}
       </li>
     ));
@@ -17,9 +17,9 @@ class SongList extends PureComponent {
     }
 
     return (
-      <div>
+      <ul className="collection">
         {this.renderSongs()}
-      </div>
+      </ul>
     );
   }
 }
