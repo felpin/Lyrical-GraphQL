@@ -3,6 +3,8 @@ import React, { PureComponent } from 'react';
 import { graphql } from 'react-apollo';
 import { hashHistory, Link } from 'react-router';
 
+import fetchSongs from '../queries/fetchSongs';
+
 class SongCreate extends PureComponent {
   constructor(props) {
     super(props);
@@ -14,7 +16,10 @@ class SongCreate extends PureComponent {
     event.preventDefault();
 
     this.props
-      .mutate({ variables: { title: this.state.title } })
+      .mutate({
+        variables: { title: this.state.title },
+        refetchQueries: [{ query: fetchSongs }]
+      })
       .then(() => hashHistory.push('/'));
   }
 
