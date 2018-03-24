@@ -6,10 +6,23 @@ import { Link } from 'react-router';
 import fetchSongs from '../queries/fetchSongs';
 
 class SongList extends PureComponent {
+  onSongDelete(id) {
+    this.props.mutate({
+      variables: { id },
+      refetchQueries: [{ query: fetchSongs }],
+    });
+  }
+
   renderSongs() {
-    return this.props.data.songs.map(song => (
-      <li key={song.id} className="collection-item">
-        {song.title}
+    return this.props.data.songs.map(({ id, title }) => (
+      <li key={id} className="collection-item">
+        {title}
+        <i
+          className="material-icons right"
+          onClick={() => this.onSongDelete(id)}
+        >
+          delete
+        </i>
       </li>
     ));
   }
