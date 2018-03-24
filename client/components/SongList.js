@@ -1,3 +1,4 @@
+import gql from 'graphql-tag';
 import React, { PureComponent } from 'react';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router';
@@ -31,4 +32,14 @@ class SongList extends PureComponent {
   }
 }
 
-export default graphql(fetchSongs)(SongList);
+const mutation = gql`
+mutation DeleteSong($id: ID) {
+  deleteSong(id: $id) {
+    id
+  }
+}
+`;
+
+export default graphql(fetchSongs)(
+  graphql(mutation)(SongList)
+);
