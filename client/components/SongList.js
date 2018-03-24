@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import React, { PureComponent } from 'react';
 import { graphql } from 'react-apollo';
+import { Link } from 'react-router';
 
 class SongList extends PureComponent {
   renderSongs() {
@@ -17,9 +18,14 @@ class SongList extends PureComponent {
     }
 
     return (
-      <ul className="collection">
-        {this.renderSongs()}
-      </ul>
+      <div>
+        <ul className="collection">
+          {this.renderSongs()}
+        </ul>
+        <Link className="btn-floating btn-large red right" to="/songs/new">
+          <i className="material-icons">add</i>
+        </Link>
+      </div>
     );
   }
 }
