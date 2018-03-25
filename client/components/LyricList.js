@@ -12,7 +12,7 @@ class LyricList extends PureComponent {
   render() {
     return (
       <ul className="collection">
-        Lyric List
+        {this.renderLyrics()}
       </ul>
     );
   }
