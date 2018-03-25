@@ -13,11 +13,13 @@ class SongDetail extends PureComponent {
       return <div>Loading...</div>;
     }
 
+    const { id, title } = song;
+
     return (
       <div>
         <Link to="/">Back</Link>
-        <h3>{song.title}</h3>
-        <LyricCreate />
+        <h3>{title}</h3>
+        <LyricCreate songId={id} />
       </div>
     );
   }
