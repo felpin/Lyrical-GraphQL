@@ -4,6 +4,7 @@ import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
 import { hashHistory, IndexRoute, Route, Router } from 'react-router';
 
+import './style/style.css';
 import App from './components/App';
 import SongCreate from './components/SongCreate';
 import SongList from './components/SongList';
