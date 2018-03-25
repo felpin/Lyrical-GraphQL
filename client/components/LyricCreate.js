@@ -19,12 +19,7 @@ class LyricCreate extends PureComponent {
     event.preventDefault();
 
     this.props
-      .mutate({
-        variables: {
-          content: this.state.content,
-          songId: this.props.songId,
-        },
-      })
+      .mutate({ variables: { content: this.state.content } })
       .then(() => this.setState({ content: '' }));
   }
 
@@ -52,4 +47,6 @@ mutation AddLyricToSong($content: String, $songId: ID) {
 }
 `;
 
-export default graphql(mutation)(LyricCreate);
+export default graphql(mutation, {
+  options: props => ({ variables: { songId: props.songId } }),
+})(LyricCreate);
