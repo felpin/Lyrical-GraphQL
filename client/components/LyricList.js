@@ -8,7 +8,7 @@ class LyricList extends PureComponent {
   }
 
   renderLyrics() {
-    return this.props.lyrics.map(({ id, content }) => (
+    return this.props.lyrics.map(({ id, content, likes }) => (
       <li key={id} className="collection-item">
         {content}
         <i
@@ -17,6 +17,9 @@ class LyricList extends PureComponent {
         >
           thumb_up
         </i>
+        <span className="right">
+          {likes}
+        </span>
       </li>
     ));
   }
