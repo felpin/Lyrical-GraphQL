@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
 import React, { PureComponent } from 'react';
-import { graphql } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 
-class LyricList extends PureComponent {
-  onLike(id, likes) {
-    this.props.mutate({
+function createOnLikeHandler(mutate, id, likes) {
+  return function onLike() {
+    mutate({
       variables: { id },
       optimisticResponse: {
         __typename: 'Mutation',
@@ -16,14 +16,16 @@ class LyricList extends PureComponent {
       },
     });
   }
+}
 
-  renderLyrics() {
+class LyricList extends PureComponent {
+  renderLyrics(mutate) {
     return this.props.lyrics.map(({ id, content, likes }) => (
       <li key={id} className="collection-item">
         {content}
         <i
           className="material-icons right"
-          onClick={() => this.onLike(id, likes)}
+          onClick={createOnLikeHandler(mutate, id, likes)}
         >
           thumb_up
         </i>
@@ -36,9 +38,15 @@ class LyricList extends PureComponent {
 
   render() {
     return (
-      <ul className="collection">
-        {this.renderLyrics()}
-      </ul>
+      <Mutation mutation={mutation}>
+        {(mutate, result) => {
+          return (
+            <ul className="collection">
+              {this.renderLyrics(mutate)}
+            </ul>
+          );
+        }}
+      </Mutation>
     );
   }
 }
@@ -52,4 +60,4 @@ mutation LikeLyric($id: ID) {
 }
 `;
 
-export default graphql(mutation)(LyricList);
+export default LyricList;

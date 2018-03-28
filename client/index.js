@@ -1,4 +1,6 @@
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
+import { createHttpLink } from "apollo-link-http";
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
@@ -11,7 +13,10 @@ import SongDetail from './components/SongDetail';
 import SongList from './components/SongList';
 
 const client = new ApolloClient({
-  dataIdFromObject: obj => obj.id
+  link: createHttpLink(),
+  cache: new InMemoryCache({
+    dataIdFromObject: obj => obj.id,
+  }),
 });
 
 const Root = () => {
