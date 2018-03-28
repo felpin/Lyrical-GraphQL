@@ -1,48 +1,59 @@
 import gql from 'graphql-tag';
 import React, { PureComponent } from 'react';
-import { graphql } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import { Link } from 'react-router';
 
 import fetchSongs from '../queries/fetchSongs';
 
-class SongList extends PureComponent {
-  onSongDelete(id) {
-    this.props
-      .mutate({ variables: { id } })
-      .then(() => this.props.data.refetch());
-  }
-
-  renderSongs() {
-    return this.props.data.songs.map(({ id, title }) => (
-      <li key={id} className="collection-item">
-        <Link to={`/songs/${id}`}>{title}</Link>
-        <i
-          className="material-icons right"
-          onClick={() => this.onSongDelete(id)}
-        >
-          delete
-        </i>
-      </li>
-    ));
-  }
-
-  render() {
-    if (this.props.data.loading) {
-      return <div>Loading...</div>;
-    }
-
-    return (
-      <div>
-        <ul className="collection">
-          {this.renderSongs()}
-        </ul>
-        <Link className="btn-floating btn-large red right" to="/songs/new">
-          <i className="material-icons">add</i>
-        </Link>
-      </div>
-    );
+function createOnSongDelete(id, mutate, refetch) {
+  return function onSongDelete() {
+    mutate({ variables: { id } })
+      .then(() => refetch());
   }
 }
+
+function renderSongs(songs, mutate, refetch) {
+  return songs.map(({ id, title }) => (
+    <li key={id} className="collection-item">
+      <Link to={`/songs/${id}`}>{title}</Link>
+      <i
+        className="material-icons right"
+        onClick={createOnSongDelete(id, mutate, refetch)}
+      >
+        delete
+      </i>
+    </li>
+  ));
+}
+
+const SongList = () => (
+  <Mutation mutation={mutation}>
+    {(mutate) => {
+      return (
+        <Query query={fetchSongs}>
+          {(result) => {
+            const { loading, data: { songs }, refetch } = result;
+
+            if (loading) {
+              return <div>Loading...</div>;
+            }
+
+            return (
+              <div>
+                <ul className="collection">
+                  {renderSongs(songs, mutate, refetch)}
+                </ul>
+                <Link className="btn-floating btn-large red right" to="/songs/new">
+                  <i className="material-icons">add</i>
+                </Link>
+              </div>
+            );
+          }}
+        </Query>
+      );
+    }}
+  </Mutation>
+);
 
 const mutation = gql`
 mutation DeleteSong($id: ID) {
@@ -52,6 +63,4 @@ mutation DeleteSong($id: ID) {
 }
 `;
 
-export default graphql(fetchSongs)(
-  graphql(mutation)(SongList)
-);
+export default SongList;
